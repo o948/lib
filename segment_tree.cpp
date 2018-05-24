@@ -7,6 +7,10 @@ struct segment_tree {
 	int N;
 	vector<int> sum;
 
+	void recalc(int k) {
+		sum[k] = sum[2*k+1] + sum[2*k+2];
+	}
+
 	void init(int n) {
 		N = 1;
 		while (N < n) {
@@ -31,7 +35,7 @@ struct segment_tree {
 		int mid = (L+R)/2;
 		build(xs, 2*k+1, L, mid);
 		build(xs, 2*k+2, mid+1, R);
-		sum[k] = sum[2*k+1] + sum[2*k+2];
+		recalc(k);
 	}
 
 	void put(int i, int x) {
@@ -49,7 +53,7 @@ struct segment_tree {
 		int mid = (L+R)/2;
 		put(i, x, 2*k+1, L, mid);
 		put(i, x, 2*k+2, mid+1, R);
-		sum[k] = sum[2*k+1] + sum[2*k+2];
+		recalc(k);
 	}
 
 	int get_sum(int i, int j) {
