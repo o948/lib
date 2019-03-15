@@ -2,7 +2,7 @@
 using namespace std;
 
 
-struct least_common_ancestor {
+struct lowest_common_ancestor {
 
 	int K;
 	vector<int> h;
@@ -98,7 +98,7 @@ int main() {
 	vector<int> idx(N);
 	flatten(g, 0, -1, arr, idx);
 
-	least_common_ancestor lca;
+	lowest_common_ancestor lca;
 	lca.build(N, g);
 
 	while (Q--) {
