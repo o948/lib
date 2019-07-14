@@ -25,8 +25,8 @@ struct segment_tree {
 		while (N < n) {
 			N <<= 1;
 		}
-		sum.resize(2*N);
-		add.resize(2*N);
+		sum.assign(2*N, 0);
+		add.assign(2*N, 0);
 	}
 
 	void build(const vector<int>& xs) {
