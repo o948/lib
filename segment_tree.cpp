@@ -5,10 +5,10 @@ using namespace std;
 struct segment_tree {
 
 	int N;
-	vector<int> sum;
+	vector<int> min;
 
 	void recalc(int k) {
-		sum[k] = sum[2*k+1] + sum[2*k+2];
+		min[k] = ::min(min[2*k+1], min[2*k+2]);
 	}
 
 	void init(int n) {
@@ -16,7 +16,7 @@ struct segment_tree {
 		while (N < n) {
 			N <<= 1;
 		}
-		sum.resize(2*N);
+		min.assign(2*N, INT_MAX);
 	}
 
 	void build(const vector<int>& xs) {
@@ -29,7 +29,7 @@ struct segment_tree {
 			return;
 		}
 		if (L == R) {
-			sum[k] = xs[L];
+			min[k] = xs[L];
 			return;
 		}
 		int mid = (L+R)/2;
@@ -47,7 +47,7 @@ struct segment_tree {
 			return;
 		}
 		if (L == R) {
-			sum[k] = x;
+			min[k] = x;
 			return;
 		}
 		int mid = (L+R)/2;
@@ -56,21 +56,21 @@ struct segment_tree {
 		recalc(k);
 	}
 
-	int get_sum(int i, int j) {
-		return get_sum(i, j, 0, 0, N-1);
+	int get_min(int i, int j) {
+		return get_min(i, j, 0, 0, N-1);
 	}
 
-	int get_sum(int i, int j, int k, int L, int R) {
+	int get_min(int i, int j, int k, int L, int R) {
 		if (j < L || R < i) {
-			return 0;
+			return INT_MAX;
 		}
 		if (i <= L && R <= j) {
-			return sum[k];
+			return min[k];
 		}
 		int mid = (L+R)/2;
-		return (
-			get_sum(i, j, 2*k+1, L, mid) +
-			get_sum(i, j, 2*k+2, mid+1, R)
+		return ::min(
+			get_min(i, j, 2*k+1, L, mid),
+			get_min(i, j, 2*k+2, mid+1, R)
 		);
 	}
 };
@@ -105,12 +105,12 @@ int main() {
 				int j = rand() % N;
 				if (j < i) swap(i, j);
 
-				int sum = 0;
+				int min = M;
 				for (int k = i; k <= j; k++) {
-					sum += xs[k];
+					min = ::min(min, xs[k]);
 				}
 
-				assert(sum == tree.get_sum(i, j));
+				assert(min == tree.get_min(i, j));
 				break;
 			}
 		}
